@@ -1,6 +1,6 @@
 [workspace]
 
-members = []
+members = ["blink"]
 
 # cargo build/run
 [profile.dev]
