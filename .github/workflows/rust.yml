@@ -29,9 +29,7 @@ jobs:
       - name: Install target
         run: rustup target install thumbv6m-none-eabi
       - name: Install other tools
-        run: |
-          cargo install flip-link
-          cargo install probe-run
+        run: cargo install flip-link
       - name: Build
         run: cargo build --verbose
       - name: Check format
