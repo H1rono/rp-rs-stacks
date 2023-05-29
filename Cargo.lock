@@ -18,6 +18,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "atomic-polyfill"
+version = "1.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c314e70d181aa6053b26e3f7fbf86d1dfff84f816a6175b967666b3506ef7289"
+dependencies = [
+ "critical-section",
+]
+
+[[package]]
 name = "autocfg"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -53,6 +62,7 @@ dependencies = [
  "defmt",
  "defmt-rtt",
  "embedded-hal",
+ "once_cell",
  "panic-probe",
  "rp-pico",
 ]
@@ -213,7 +223,7 @@ version = "0.7.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "db04bc24a18b9ea980628ecf00e6c0264f3c1426dac36c00cb49b6fbad8b0743"
 dependencies = [
- "atomic-polyfill",
+ "atomic-polyfill 0.1.11",
  "hash32",
  "rustc_version 0.4.0",
  "spin",
@@ -272,6 +282,16 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "once_cell"
+version = "1.17.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9670a07f94779e00908f3e686eab508878ebb390ba6e604d3a284c00e8d0487b"
+dependencies = [
+ "atomic-polyfill 1.0.2",
+ "critical-section",
 ]
 
 [[package]]
