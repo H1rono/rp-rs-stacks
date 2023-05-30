@@ -3,8 +3,6 @@
 
 use core::cell::RefCell;
 
-use core::ops::Deref;
-
 use cortex_m::{
     delay::Delay,
     interrupt::{free, Mutex},
@@ -66,22 +64,21 @@ static MACHINE: Lazy<Mutex<RefCell<Machine>>> = Lazy::new(|| {
 #[entry]
 fn main() -> ! {
     info!("Program start");
-    let machine = MACHINE.deref();
     let mut delay = free(|cs| {
-        let mut m = machine.borrow(cs).borrow_mut();
+        let mut m = MACHINE.borrow(cs).borrow_mut();
         m.delay.take().unwrap()
     });
 
     loop {
         info!("on!");
         free(|cs| {
-            let mut m = machine.borrow(cs).borrow_mut();
+            let mut m = MACHINE.borrow(cs).borrow_mut();
             m.led_pin.set_high().unwrap();
         });
         delay.delay_ms(500);
         info!("off!");
         free(|cs| {
-            let mut m = machine.borrow(cs).borrow_mut();
+            let mut m = MACHINE.borrow(cs).borrow_mut();
             m.led_pin.set_low().unwrap();
         });
         delay.delay_ms(500);
