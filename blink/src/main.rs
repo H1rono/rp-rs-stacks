@@ -1,35 +1,42 @@
 #![no_std]
 #![no_main]
 
-use core::cell::RefCell;
-
-use cortex_m::{
-    delay::Delay,
-    interrupt::{free, Mutex},
-};
+// Logging support
 use defmt::*;
 use defmt_rtt as _;
-use embedded_hal::digital::v2::OutputPin;
+
+// Panic handler
 use panic_probe as _;
 
+// alias for the BSP
 use rp_pico as bsp;
 
-use bsp::hal::{
-    clocks::{init_clocks_and_plls, Clock},
-    entry,
-    gpio::{bank0::Gpio25, Output, Pin, PushPull},
-    pac,
-    sio::Sio,
-    watchdog::Watchdog,
-};
+// Entry point
+use bsp::entry;
 
+// Peripherals
+use bsp::hal::{pac, sio::Sio, watchdog::Watchdog};
+
+// Clocks
+use bsp::hal::clocks::{init_clocks_and_plls, Clock};
+use cortex_m::delay::Delay;
+
+// GPIO
+use bsp::hal::gpio::{bank0::Gpio25, Output, Pin, PushPull};
+use embedded_hal::digital::v2::OutputPin;
+
+// Concurrency
+use core::cell::RefCell;
+use cortex_m::interrupt::{free, Mutex};
 use once_cell::sync::Lazy;
 
+// Struct used in the main loop
 struct Machine {
     pub delay: Option<Delay>,
     pub led_pin: Pin<Gpio25, Output<PushPull>>,
 }
 
+// Global state
 static MACHINE: Lazy<Mutex<RefCell<Machine>>> = Lazy::new(|| {
     let mut pac = pac::Peripherals::take().unwrap();
     let core = pac::CorePeripherals::take().unwrap();
