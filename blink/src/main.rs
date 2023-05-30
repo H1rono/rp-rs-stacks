@@ -5,8 +5,10 @@ use core::cell::RefCell;
 
 use core::ops::Deref;
 
-use bsp::{entry, hal::gpio::bank0::Gpio25};
-use cortex_m::interrupt::{free, Mutex};
+use cortex_m::{
+    delay::Delay,
+    interrupt::{free, Mutex},
+};
 use defmt::*;
 use defmt_rtt as _;
 use embedded_hal::digital::v2::OutputPin;
@@ -16,7 +18,8 @@ use rp_pico as bsp;
 
 use bsp::hal::{
     clocks::{init_clocks_and_plls, Clock},
-    gpio::{Output, Pin, PushPull},
+    entry,
+    gpio::{bank0::Gpio25, Output, Pin, PushPull},
     pac,
     sio::Sio,
     watchdog::Watchdog,
@@ -25,7 +28,7 @@ use bsp::hal::{
 use once_cell::sync::Lazy;
 
 struct Machine {
-    pub delay: Option<cortex_m::delay::Delay>,
+    pub delay: Option<Delay>,
     pub led_pin: Pin<Gpio25, Output<PushPull>>,
 }
 
@@ -48,8 +51,7 @@ static MACHINE: Lazy<Mutex<RefCell<Machine>>> = Lazy::new(|| {
     .ok()
     .unwrap();
 
-    let delay = cortex_m::delay::Delay::new(core.SYST, clocks.system_clock.freq().to_Hz());
-    let delay = Some(delay);
+    let delay = Some(Delay::new(core.SYST, clocks.system_clock.freq().to_Hz()));
 
     let pins = bsp::Pins::new(
         pac.IO_BANK0,
