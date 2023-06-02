@@ -1,17 +1,16 @@
 #![no_std]
 #![no_main]
 
-use bsp::entry;
+use cortex_m::interrupt::{free, Mutex};
 use defmt::*;
 use defmt_rtt as _;
+use once_cell::sync::Lazy;
 use panic_probe as _;
 
-// Provide an alias for our BSP so we can switch targets quickly.
-// Uncomment the BSP you included in Cargo.toml, the rest of the code does not need to change.
+use bsp::entry;
 use rp_pico as bsp;
-// use sparkfun_pro_micro_rp2040 as bsp;
 
-use bsp::hal::{self, clocks::init_clocks_and_plls, pac, watchdog::Watchdog};
+use bsp::hal::{self, clocks::init_clocks_and_plls, pac, watchdog::Watchdog, Timer};
 
 // USB Device support
 use usb_device::{class_prelude::*, prelude::*};
@@ -20,12 +19,15 @@ use usb_device::{class_prelude::*, prelude::*};
 use usbd_serial::SerialPort;
 
 // Used to demonstrate writing formatted strings
-use core::fmt::Write;
+use core::{cell::RefCell, fmt::Write};
 use heapless::String;
 
-#[entry]
-fn main() -> ! {
-    info!("Program start");
+struct Machine {
+    pub usb_bus: UsbBusAllocator<hal::usb::UsbBus>,
+    pub timer: Timer,
+}
+
+static MACHINE: Lazy<Mutex<RefCell<Option<Machine>>>> = Lazy::new(|| {
     let mut pac = pac::Peripherals::take().unwrap();
     let mut watchdog = Watchdog::new(pac.WATCHDOG);
 
@@ -52,6 +54,15 @@ fn main() -> ! {
         &mut pac.RESETS,
     ));
 
+    let timer = Timer::new(pac.TIMER, &mut pac.RESETS);
+    Mutex::new(RefCell::new(Some(Machine { usb_bus, timer })))
+});
+
+#[entry]
+fn main() -> ! {
+    info!("Program start");
+    let Machine { usb_bus, timer } = free(|cs| MACHINE.borrow(cs).take().unwrap());
+
     // Set up the USB Communications Class Device driver
     let mut serial = SerialPort::new(&usb_bus);
 
@@ -62,9 +73,6 @@ fn main() -> ! {
         .serial_number("TEST")
         .device_class(2) // from: https://www.usb.org/defined-class-codes
         .build();
-
-    let timer = hal::Timer::new(pac.TIMER, &mut pac.RESETS);
-
     let mut said_hello = false;
     loop {
         // A welcome message at the beginning
