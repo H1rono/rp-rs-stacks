@@ -355,6 +355,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "pwm_blink"
+version = "0.1.0"
+dependencies = [
+ "cortex-m",
+ "cortex-m-rt",
+ "defmt",
+ "defmt-rtt",
+ "embedded-hal",
+ "once_cell",
+ "panic-probe",
+ "rp-pico",
+]
+
+[[package]]
 name = "quote"
 version = "1.0.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
