@@ -1,4 +1,4 @@
-# blink
+# PWM blink
 
 ref:
 
