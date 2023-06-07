@@ -569,6 +569,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "timer_interrupt"
+version = "0.1.0"
+dependencies = [
+ "cortex-m",
+ "cortex-m-rt",
+ "defmt",
+ "defmt-rtt",
+ "embedded-hal",
+ "fugit",
+ "once_cell",
+ "panic-probe",
+ "rp-pico",
+]
+
+[[package]]
 name = "unicode-ident"
 version = "1.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
