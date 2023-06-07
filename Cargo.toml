@@ -1,6 +1,6 @@
 [workspace]
 
-members = ["blink", "usb", "pwm_blink"]
+members = ["blink", "usb", "pwm_blink", "gpio_interrupt"]
 
 # cargo build/run
 [profile.dev]
