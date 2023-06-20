@@ -13,7 +13,10 @@ use rp_pico as bsp;
 use bsp::hal::{self, clocks::init_clocks_and_plls, pac, watchdog::Watchdog, Timer};
 
 // USB Device support
-use usb_device::{class_prelude::*, prelude::*};
+use usb_device::{
+    class_prelude::UsbBusAllocator,
+    prelude::{UsbDeviceBuilder, UsbVidPid},
+};
 
 // USB Communications Class Device support
 use usbd_serial::SerialPort;
