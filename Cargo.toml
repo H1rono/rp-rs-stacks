@@ -14,7 +14,7 @@ panic-probe = { version = "0.3", features = ["print-defmt"] }
 rp-pico = "0.7"
 
 [workspace.dependencies.once_cell]
-version = "1.17"
+version = "1.18"
 features = ["critical-section"]
 default-features = false
 
