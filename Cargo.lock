@@ -616,6 +616,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "usb_interrupt"
+version = "0.1.0"
+dependencies = [
+ "cortex-m",
+ "cortex-m-rt",
+ "defmt",
+ "defmt-rtt",
+ "embedded-hal",
+ "panic-probe",
+ "rp-pico",
+ "usb-device",
+ "usbd-serial",
+]
+
+[[package]]
 name = "usbd-serial"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"

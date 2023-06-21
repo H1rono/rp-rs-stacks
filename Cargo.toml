@@ -1,6 +1,13 @@
 [workspace]
 
-members = ["blink", "usb", "pwm_blink", "gpio_interrupt", "timer_interrupt"]
+members = [
+    "blink",
+    "usb",
+    "pwm_blink",
+    "gpio_interrupt",
+    "timer_interrupt",
+    "usb_interrupt",
+]
 
 [workspace.dependencies]
 cortex-m = "0.7"
