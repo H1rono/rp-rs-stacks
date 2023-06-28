@@ -8,6 +8,7 @@ members = [
     "gpio_interrupt",
     "timer_interrupt",
     "usb_interrupt",
+    "rtic_blink",
 ]
 
 [workspace.dependencies]
