@@ -9,6 +9,7 @@ members = [
     "timer_interrupt",
     "usb_interrupt",
     "rtic_blink",
+    "sg90",
 ]
 
 [workspace.dependencies]

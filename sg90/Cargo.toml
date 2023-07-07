@@ -1,0 +1,18 @@
+[package]
+edition = "2021"
+name = "sg90"
+version = "0.1.0"
+publish = false
+
+[dependencies]
+cortex-m = { workspace = true }
+cortex-m-rt = { workspace = true }
+embedded-hal = { workspace = true }
+
+defmt = { workspace = true }
+defmt-rtt = { workspace = true }
+panic-probe = { workspace = true }
+
+rp-pico = { workspace = true }
+
+once_cell = { workspace = true }
