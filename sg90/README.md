@@ -1,4 +1,4 @@
-# PWM blink
+# SG90 servo
 
 ref:
 
