@@ -15,31 +15,27 @@ where
     // TODO: check if this implementation is correct
     slice.set_ph_correct();
     slice.enable();
-    slice.set_top(u16::MAX);
-    // f_c = 125e6, f_pwm = 50, top = 65535
-    // ceil(16 * f_c / (top * f_pwm)) = 0x263
-    // so I set divider as 0x26.3
-    slice.set_div_int(0x26);
-    slice.set_div_frac(0x3);
+    // f_c = 125e6, f_pwm = 50, top <= 65535
+    // divider = f_c / (f_pwm * top)
+    // so I set top = 50000, divider = 50
+    slice.set_top(50000);
+    slice.set_div_int(50);
+    slice.set_div_frac(0);
 }
 
 fn degree_to_duty(deg: u8) -> u16 {
     // TODO: check this
-    let deg = (deg % 181) as u16;
     // ** degree to pulse width **
     // 0deg <-> 0.5ms, 180deg <-> 2.4ms
     // => pulse_width_ms = degree * (2.4 - 0.5) / 180 + 0.5
     // ** pulse width to duty **
-    // 20ms <-> 65535 (u16::MAX)
-    // => duty = pulse_width_ms * u16::MAX / 20
+    // 20ms <-> 50000
+    // => duty = pulse_width_ms * 50000 / 20
     // ** degree to duty **
-    // duty = (degree * (2.4 - 0.5) / 180 + 0.5) * u16::MAX / 20
-    //      = degree * 1.9 * 65535 / 3600 + 65535 / 40
-    // in python, these two are the same within `deg in range(181)`:
-    //     int(deg * 1.9 * 65535 / 3600 + 65535 / 40)
-    //     deg * int(1.9 * 65535 / 3600) + int(65535 / 40)
+    // duty = degree * 1.9 * 50000 / 3600 + 50000 / 40
     // so I compute as:
-    deg * 34 + 1638
+    let deg = (deg % 181) as u32;
+    (deg * 950 / 36) as u16 + 1250
 }
 
 // https://recruit.cct-inc.co.jp/tecblog/rust/template-rust/
