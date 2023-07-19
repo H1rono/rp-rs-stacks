@@ -22,7 +22,7 @@ use bsp::hal::clocks::{init_clocks_and_plls, Clock};
 use cortex_m::delay::Delay;
 
 // GPIO
-use bsp::hal::pwm::{Pwm4, Slices};
+use bsp::hal::pwm::{Pwm0, Slices};
 
 // Concurrency
 use core::cell::RefCell;
@@ -35,7 +35,7 @@ use sg90::Sg90;
 // Struct used in the main loop
 struct Machine {
     pub delay: Option<Delay>,
-    pub servo: Sg90<Pwm4, bsp::hal::pwm::B>,
+    pub servo: Sg90<Pwm0, bsp::hal::pwm::B>,
 }
 
 // Global state
@@ -68,8 +68,8 @@ static MACHINE: Lazy<Mutex<RefCell<Machine>>> = Lazy::new(|| {
     // Init PWMs
     let pwm_slices = Slices::new(pac.PWM, &mut pac.RESETS);
 
-    let mut servo = Sg90::<Pwm4, bsp::hal::pwm::B>::from_slice(pwm_slices.pwm4);
-    servo.output_to(pins.gpio9);
+    let mut servo = Sg90::<Pwm0, bsp::hal::pwm::B>::from_slice(pwm_slices.pwm0);
+    servo.output_to(pins.gpio1);
     Mutex::new(RefCell::new(Machine { delay, servo }))
 });
 
@@ -80,12 +80,12 @@ fn main() -> ! {
     let mut deg = 0i32;
     let mut d_deg = 10;
     loop {
+        info!("{}", deg);
         free(|cs| MACHINE.borrow(cs).borrow_mut().servo.set_degree(deg as u8));
         deg += d_deg;
         if deg <= 0 || 180 <= deg {
             d_deg *= -1;
         }
-        info!("{}", deg);
-        delay.delay_ms(300);
+        delay.delay_ms(500);
     }
 }
