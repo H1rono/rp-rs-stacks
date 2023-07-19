@@ -12,19 +12,18 @@ where
     S: SliceId,
 {
     // https://www.i-programmer.info/programming/hardware/14849-the-pico-in-c-basic-pwm.html?start=2
-    // TODO: check if this implementation is correct
     slice.set_ph_correct();
     slice.enable();
     // f_c = 125e6, f_pwm = 50, top <= 65535
     // divider = f_c / (f_pwm * top)
     // so I set top = 50000, divider = 50
-    slice.set_top(50000);
-    slice.set_div_int(50);
+    // TODO: This is correctly produces 50Hz pulse, but why?
+    slice.set_top(49999);
+    slice.set_div_int(25);
     slice.set_div_frac(0);
 }
 
 fn degree_to_duty(deg: u8) -> u16 {
-    // TODO: check this
     // ** degree to pulse width **
     // 0deg <-> 0.5ms, 180deg <-> 2.4ms
     // => pulse_width_ms = degree * (2.4 - 0.5) / 180 + 0.5
