@@ -16,7 +16,7 @@ panic-probe = { workspace = true }
 rp-pico = { workspace = true }
 
 usb-device = { version = "0.2", features = ["defmt"] }
-usbd-serial = "0.1"
+usbd-serial = "0.2"
 heapless = "0.8"
 
 once_cell = { workspace = true }
