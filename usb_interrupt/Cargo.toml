@@ -18,6 +18,6 @@ rp-pico = { workspace = true }
 usb-device = { version = "0.2", features = ["defmt"] }
 usbd-serial = "0.1"
 
-embedded-alloc = "0.5"
+embedded-alloc = "0.6"
 self_cell = "1.0"
 once_cell = { workspace = true }
