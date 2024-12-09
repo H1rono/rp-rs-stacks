@@ -19,5 +19,5 @@ usb-device = { version = "0.2", features = ["defmt"] }
 usbd-serial = "0.1"
 
 embedded-alloc = "0.5"
-self_cell = "1.0"
+self_cell = "1.1"
 once_cell = { workspace = true }
